@@ -38,14 +38,12 @@ END FUNCTION
 
 5b.
 ```
-FUNCTION checkoutBook(booksLoaning, guest)
+FUNCTION checkoutBook(book, guest)
   CALL isCheckoutPermitted WITH guest
   IF isCheckoutPermitted is TRUE THEN
     APPEND booksLoaning to guest.books
-    FOR each book in booksLoaning
-      SET book.status to 'Checked Out'
-    END FOR
-    PRINT 'Your books have been issued'
+    SET book.status to 'Checked Out'
+    PRINT 'Your book has been issued'
   ELSE IF isCheckoutPermitted is FALSE THEN
     PRINT 'Unable to check out book.'
   END IF
@@ -60,10 +58,9 @@ FUNCTION isCheckoutPermitted(guest)
 END FUNCTION
 ```
 
-5c.
+5c. Other than following the SRP and making a new class to handle making offers, there's not much I would refactor - methods are reasonably extracted, each class handles a unique task and functions within that task similarly handle specific tasks associated with it, the variables are well-named and seems to be self-documented well.
 ```
 CLASS BankAccount
-
  FUNCTION displayBalance
     PRINT balance
  END FUNCTION
@@ -77,7 +74,9 @@ CLASS BankAccount
        SET balance to balance - amount
      END IF
  END FUNCTION
-
+END CLASS
+ 
+CLASS MakeOffers
  FUNCTION creditCardOffer
      IF NOT(customer.hasCreditCard) THEN
          CALL offerCreditCard
@@ -89,6 +88,7 @@ CLASS BankAccount
          CALL offerCheckingAccount
      END
  END FUNCTION
+END CLASS
 ```
 
 6.
@@ -101,23 +101,15 @@ function calcSum(integersArray) {
   return sum;
 }
 
-function isPerfectSquare(checkValue){
-  let squareValue = Math.sqrt(checkValue);
-  if (checkValue % squareValue === 0){
-    return true;
-  }
-  return false;
-}
-
 function displayPerfectSquare(integersArray){
   let sum = calcSum(integersArray);
-  if (isPerfectSquare(sum)){
-    return `The sum of the array is a perfect square, which is: ${Math.sqrt(sum)}`;
+  let squareValue = Math.sqrt(sum);
+  if (sum % squareValue === 0){
+    return `The sum of the array (${sum}) is a perfect square, which is: ${squareValue}`;
   }
   return `The sum of the array is not a perfect square, the sum is: ${sum}`;
 }
 
-console.log(displayPerfectSquare([1,3,1,1]));
 ```
 7.
 ```
@@ -132,4 +124,98 @@ function checkDuplicate(arrayOne, arrayTwo){
   }
   return false;
 }
+```
+
+Extra credit:
+
+For this, I was wondering about how to balance over-engineering against single-responsibility and method extraction. Here are three code snippets, each solves the anagram problem, however they feel over-engineered. I would say the third block is the best - there's method extraction, over-nesting is eliminated, and it's pretty straight-forward as to what the code does. However, the second code block is shorter, and while it nests a little more, it feels less over-engineered.
+
+1.
+```
+function stringToArray(word){
+  let characterArray = [];
+  for (let i = 0; i<word.length; i++){
+    characterArray.push(word[i]);
+  }
+  return characterArray;
+}
+
+function areAnagrams(wordOne, wordTwo){
+  let firstArray = stringToArray(wordOne);
+  let secondArray = stringToArray(wordTwo);
+  
+  let firstSorted = firstArray.sort();
+  let secondSorted = secondArray.sort();
+
+  if (firstArray.length === secondArray.length){
+    for (let i = 0; i<firstArray.length; i++){
+      if (firstSorted[i] === secondSorted[i] && i === firstArray.length-1){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+console.log(areAnagrams('hello', 'hello'));
+console.log(areAnagrams('hello', 'nope'));
+console.log(areAnagrams('hello', 'olleh'));
+```
+2)
+```
+function areAnagrams(wordOne, wordTwo){
+  let firstSplit = wordOne.split('');
+  let secondSplit = wordTwo.split('');
+
+  let firstSorted = firstSplit.sort();
+  let secondSorted = secondSplit.sort();
+
+  if (firstSplit.length === firstSplit.length){
+    for (let i = 0; i<firstSplit.length; i++){
+      if (firstSorted[i] === secondSorted[i] && i === firstSplit.length-1){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+console.log(areAnagrams('hello', 'hello'));
+console.log(areAnagrams('hello', 'nope'));
+console.log(areAnagrams('hello', 'olleh'));
+```
+
+3.
+
+```
+function isSameLength(firstArray, secondArray){
+  if (firstArray.length === secondArray.length){
+    return true;
+  }
+  return false;
+}
+
+function areAnagrams(wordOne, wordTwo){
+  if (!isSameLength(wordOne, wordTwo)){
+    return false;
+  } 
+
+  let firstSplit = wordOne.split('');
+  let secondSplit = wordTwo.split('');
+  
+  let firstSorted = firstSplit.sort();
+  let secondSorted = secondSplit.sort();
+
+  for (let i = 0; i<firstSplit.length; i++){
+    if (firstSorted[i] === secondSorted[i] && i === firstSplit.length-1){
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+console.log(areAnagrams('hello', 'hello'));
+console.log(areAnagrams('hello', 'nope'));
+console.log(areAnagrams('hello', 'olleh'));
 ```
