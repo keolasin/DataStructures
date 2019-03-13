@@ -1,3 +1,135 @@
 1. Clean code is code that is written in such a way that it is inherently readable and understandable, simple, and easy to maintain, usually designed using various principles and best practices in mind. Ideally, it is code that is not only understood by the author, but quickly understood by most other readers and is not overly complicated or bloated with redundancy and excessive comments.
+
 2. Maybe not commonly used, but certainly life-critical and something many depend on, a poorly designed pacemaker (implanted computer to monitor and alter heart rhythms) has the potential to fail catastrophically. The pacemaker is unique because it is implanted in a patients chest and battery-operated - thus, it must be designed in  such a way to safely perform its desired function (monitor the heart and distribute electric currents as necessary), monitor its own battery-life, and, in the case of some newer pacemakers, interface with certain hardware at patient check-ups to ensure the pacemaker is functioning as intended. Usually, these pacemakers are implanted via surgery, and when the battery is low, a new one is implanted. A good example of a recent problem with pacemakers is from 2017, when the FDA mandated that some 500,000 pacemakers made by a certain company would need a firmware update, as they had been radio-enabled for interfacing, yet interfacing with the pacemaker was open - there was no authorization required, so it was found that anyone who wanted to and was within range of the pacemaker, could theoretically access the pacemaker and make changes, potentially maliciously or ignorantly (without physician guidance). Most of the affected patients had to visit their healthcare provider to receive the firmware update. (Source: https://www.theverge.com/2017/8/30/16230048/fda-abbott-pacemakers-firmware-update-cybersecurity-hack).
 
+3. Definitely not, first, it fails the squint test: we have odd chunks of comments off to the right, and the actual code to the left is indented in an odd way. Next, it's not really self-documented - we have to look into what the variables x, y, and z actually represent. Additionally, it does not follow DRY - we end up printing Z twice when we could simply do so once, at the end.
+```
+FUNCTION do(temperature, units)
+  IF units is equal to 'fahrenheit' OR 'F' THEN
+    SET convertedTemperature to (temperature - 32) * (5/9) // degrees fahrenheit to celsius formula
+  ELSE IF units is equal to 'celsius' OR 'C' THEN
+    SET convertedTemperature to (temperature * 9/5 + 32) // degrees celsius to fahrenheit formula
+  END IF
+  PRINT convertedTemperature
+END FUNCTION
+```
+
+4. This is clean code - it is simple, readable, and easily understood at first glance. The variables are well named (as well as the function itself), the logic is simple and not overly nested, and has a single, obvious responsibility (converts to percentages). I would not refactor this code.
+
+5a.
+```
+FUNCTION calcTotal(subTotal, discountRate, tax)
+   SET total to subTotal * discountRate + (subTotal * tax)
+   PRINT "Your total due is: " + totalDue
+   RETURN totalDue
+END FUNCTION
+
+FUNCTION checkoutCustomer(paymentType)
+   CALL calcTotal WITH subTotal, discountRate, tax RETURNING totalDue
+   CALL getPayment RETURNING amountPaid
+   IF paymentType = 'CASH' THEN
+       SET change to amountPaid - totalDue
+       PRINT "Change due: " + change
+   ELSE IF paymentType = 'CREDIT CARD' THEN
+       PRINT "Your credit card has been charged: " totalDue
+   END IF
+END FUNCTION
+```
+
+5b.
+```
+FUNCTION checkoutBook(booksLoaning, guest)
+  CALL isCheckoutPermitted WITH guest
+  IF isCheckoutPermitted is TRUE THEN
+    APPEND booksLoaning to guest.books
+    FOR each book in booksLoaning
+      SET book.status to 'Checked Out'
+    END FOR
+    PRINT 'Your books have been issued'
+  ELSE IF isCheckoutPermitted is FALSE THEN
+    PRINT 'Unable to check out book.'
+  END IF
+END FUNCTION
+
+FUNCTION isCheckoutPermitted(guest)
+  IF guest.isAccountActive AND NOT guest.hasOverdueBooks AND guest.outstandingFees = 0 THEN
+    RETURN TRUE
+  ELSE
+    RETURN FALSE
+  END IF
+END FUNCTION
+```
+
+5c.
+```
+CLASS BankAccount
+
+ FUNCTION displayBalance
+    PRINT balance
+ END FUNCTION
+
+ FUNCTION deposit(amount)
+    SET balance to balance + amount
+ END FUNCTION
+
+ FUNCTION withdraw(amount)
+     IF balance > amount THEN
+       SET balance to balance - amount
+     END IF
+ END FUNCTION
+
+ FUNCTION creditCardOffer
+     IF NOT(customer.hasCreditCard) THEN
+         CALL offerCreditCard
+     END
+ END FUNCTION
+
+ FUNCTION checkStatus
+     IF NOT(customer.hasCheckingAccount) THEN
+         CALL offerCheckingAccount
+     END
+ END FUNCTION
+```
+
+6.
+```
+function calcSum(integersArray) {
+  let sum = 0;
+  for (let i = 0; i<integersArray.length; i++){
+    sum += integersArray[i];
+  }
+  return sum;
+}
+
+function isPerfectSquare(checkValue){
+  let squareValue = Math.sqrt(checkValue);
+  if (checkValue % squareValue === 0){
+    return true;
+  }
+  return false;
+}
+
+function displayPerfectSquare(integersArray){
+  let sum = calcSum(integersArray);
+  if (isPerfectSquare(sum)){
+    return `The sum of the array is a perfect square, which is: ${Math.sqrt(sum)}`;
+  }
+  return `The sum of the array is not a perfect square, the sum is: ${sum}`;
+}
+
+console.log(displayPerfectSquare([1,3,1,1]));
+```
+7.
+```
+function checkDuplicate(arrayOne, arrayTwo){
+  for(let i = 0; i<arrayOne.length; i++){
+    for(let k = 0; k<arrayTwo.length; k++){
+      if (arrayOne[i]===arrayTwo[k]){
+        console.log(`Value of '${arrayOne[i]}' from first array matches second array at indices ${i} and ${k}, respectively.`);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+```
