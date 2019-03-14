@@ -1,0 +1,45 @@
+```
+function displayLine(peopleInLine){
+  addToLineEnd(peopleInLine,"Mary");
+  findInLine(peopleInLine,"Josh");
+  cutInLine(peopleInLine,"Ava", "Melissa");
+  leavingLine(peopleInLine,"Patrick");
+
+  console.log(`The complete line is now: ${peopleInLine.join(', ')}`);
+  return peopleInLine;
+}
+
+function addToLineEnd(personJoiningEnd){
+  peopleInLine.push(personJoiningEnd);
+  return peopleInLine;
+}
+
+function findInLine(findPerson){
+  let found = peopleInLine.findIndex((person)=>{
+    return person === findPerson;
+  });
+  console.log(`Found ${findPerson} at index of ${found}.`);
+  return peopleInLine;
+}
+
+function cutInLine(personAllowingCut, personInserted){
+  let cuttingIndex = peopleInLine.findIndex((person)=>{
+    return person === personAllowingCut;
+  });
+  peopleInLine.splice(cuttingIndex, 0, personInserted);
+  console.log(`${personAllowingCut} is letting ${personInserted} cut in line at index ${cuttingIndex}; ${personInserted} is now ahead of ${personAllowingCut}.`);
+  return peopleInLine;
+}
+
+function leavingLine(personLeaving){
+  let removedIndex = peopleInLine.findIndex(person => {
+    return person === personLeaving;
+  });
+  peopleInLine.splice(removedIndex, 1);
+  console.log(`${personLeaving} is leaving the line at index ${removedIndex}.`);
+  return peopleInLine;
+}
+
+let testLine = ["Vivian", "Ava", "Josh", "Patrick", "Mike"];
+displayLine(testLine);
+```
