@@ -1,45 +1,80 @@
+1.
+```js
+class Line {
+  constructor(line){
+    this._line = line;
+  }
+
+  get line(){
+    return this._line;
+  }
+
+  set line(newLine){
+    this._line = newLine;
+  }
+
+  handleAddPerson(addToEnd){
+    this.line.push(addToEnd);
+    console.log(`${addToEnd} added to the end of the line`);
+  }
+
+  findInLine(personSearched){
+    console.log(`Searching for ${personSearched}`);
+
+    let searchResult = this.line.findIndex( person => person === personSearched );
+
+    searchResult !== -1 ? console.log(`${personSearched} found at index ${searchResult}`) : console.log(`${personSearched} not found.`);
+
+    return searchResult;
+  }
+
+  cutInLine(personAllowingCut, personInserted){
+
+    let cuttingIndex = this.line.findIndex((person)=>{
+      return person === personAllowingCut;
+    });
+
+    this.line.splice(cuttingIndex, 0, personInserted);
+
+    console.log(`${personAllowingCut} is letting ${personInserted} cut in line at index ${cuttingIndex}; ${personInserted} is now ahead of ${personAllowingCut}.`);
+  }
+
+  leavingLine(personLeaving){
+    let removedIndex = this.line.findIndex(person => {
+      return person === personLeaving;
+    });
+    this.line.splice(removedIndex, 1);
+    console.log(`${personLeaving} is leaving the line at index ${removedIndex}.`);
+  }
+}
+
+// new testing line
+let testLine = new Line(["Vivian", "Ava", "Josh", "Patrick", "Mike"]);
+console.log(testLine.line);
+
+// adding to line end
+testLine.handleAddPerson('Mary');
+console.log(testLine.line);
+
+// finding in line
+console.log('Return value of findInLine method: '+testLine.findInLine('Emily')); // should be -1
+console.log('Return value of findInLine method: '+testLine.findInLine('Ava')); // should be index of person searched
+console.log(testLine.line);
+
+// cutting in line
+testLine.cutInLine('Ava', 'Melissa');
+console.log(testLine.line);
+
+// leaving the line
+testLine.leavingLine('Josh');
+console.log(testLine.line);
+
+// setter
+console.log('Resetting the line');
+testLine.line = ["Vivian", "Ava", "Josh", "Patrick", "Mike"];
+console.log(testLine.line);
 ```
-function displayLine(peopleInLine){
-  addToLineEnd(peopleInLine,"Mary");
-  findInLine(peopleInLine,"Josh");
-  cutInLine(peopleInLine,"Ava", "Melissa");
-  leavingLine(peopleInLine,"Patrick");
 
-  console.log(`The complete line is now: ${peopleInLine.join(', ')}`);
-  return peopleInLine;
-}
+2. Another example of a data structure would be one for inventorying objects, for example, a bicycle shop has certain amount of different bikes. One *could* organize the bikes based on when they come in new to the shop and are purchased (leave) the shop - but if we have plenty of bikes each of varying types and components (say, a mountain bike, a road bike, and kids bikes), it might make more sense to group those bikes on their similar properties. For instance, if we wanted to see all the red bikes, but have bought and sold many red bikes through the years, we would simply group our bikes based on color. Then, when we wish to check out a red bike, we go straight to the red bike section, rather than looking through our whole catalog based on when those bikes came in to or left the shop.
 
-function addToLineEnd(personJoiningEnd){
-  peopleInLine.push(personJoiningEnd);
-  return peopleInLine;
-}
-
-function findInLine(findPerson){
-  let found = peopleInLine.findIndex((person)=>{
-    return person === findPerson;
-  });
-  console.log(`Found ${findPerson} at index of ${found}.`);
-  return peopleInLine;
-}
-
-function cutInLine(personAllowingCut, personInserted){
-  let cuttingIndex = peopleInLine.findIndex((person)=>{
-    return person === personAllowingCut;
-  });
-  peopleInLine.splice(cuttingIndex, 0, personInserted);
-  console.log(`${personAllowingCut} is letting ${personInserted} cut in line at index ${cuttingIndex}; ${personInserted} is now ahead of ${personAllowingCut}.`);
-  return peopleInLine;
-}
-
-function leavingLine(personLeaving){
-  let removedIndex = peopleInLine.findIndex(person => {
-    return person === personLeaving;
-  });
-  peopleInLine.splice(removedIndex, 1);
-  console.log(`${personLeaving} is leaving the line at index ${removedIndex}.`);
-  return peopleInLine;
-}
-
-let testLine = ["Vivian", "Ava", "Josh", "Patrick", "Mike"];
-displayLine(testLine);
-```
+3. For this data structure, since we're assigning  based on properties and their associated values, we would group similar values. To access and distinguish between bikes that have the exact same properties, we might give them unique identifiers - red bike A, red bike B, although they may be exactly the same. Then we would begin sorting our blue bikes in a similar manner - blue bike A, blue bike B. If we had a bike that did not have a discrete value (it's both red and blue), we might group it separately (red and blue being a new discrete group), or at the end of one of our other bins, but we have to ensure it does not show up in both bins, as then we would be overcounting our stock.
