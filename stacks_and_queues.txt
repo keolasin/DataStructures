@@ -1,0 +1,5 @@
+1. A stack deals with newly arriving data first - whatever has most recently joined the data structure, is also the first to be dealt with. A queue is basically the opposite, where whatever joins the data structure is assigned an order, and then items are dealt with depending on what is next in line (or first arrived) before moving on to more recently added items. It's basically a to-do list, where order is important.
+
+2. Both stacks and queues deal with one item at a time before addressing another, so there is some prioritization occurring, as well as a known method to handling that data.
+
+3.
