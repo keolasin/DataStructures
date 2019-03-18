@@ -2,4 +2,4 @@
 
 2. Both stacks and queues deal with one item at a time before addressing another, so there is some prioritization occurring, as well as a known method to handling that data.
 
-3.
+3. I would think using a stack, or last-in first-out data structure would make the most sense for both UNDO and REDO functions - say we type a sentence ("I went to the store"). The *last* word in the sentence, 'store', when I UNDO, would then be removed, and we can place it in a temporary memory/array location. If we UNDO again, we again want the last item in the sentence, which is now 'the' - we then add it to the temporary array. From that temporary array, we now have ['store', 'the'] - if we redo, we want to redo in the same order that we had originally typed the sentence, or performed our undo actions - so we again want to address the last-item, first. So, we add 'the' to the fragment 'I went to' at its end, and then add 'store' if we issue another REDO command. If we were to use a queue for these functions, we would need to reverse the order of the queue- something we cannot do.
