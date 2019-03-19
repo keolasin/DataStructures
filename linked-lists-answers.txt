@@ -1,0 +1,59 @@
+1. Linked lists are useful in that they are more memory efficient - rather than having to take up consecutive memory addresses, we can assign a memory reference to the list item. However, searching through a linked list (especially a long one) can be time-consuming, as we need to start at the beginning of the list, and each list item points to the next list item - we may have to go through the whole list if our desired item were at its end.
+2. GIT is a great example of a linked list - we have a HEAD commit, or the location where we are currently working, and when we create an additional commit, our current commit (list item) then points to the next commit. When we wish to access an older commit, we simply have to move the HEAD (working location) to that commit, by starting from the initial commit, which will link to the next commit, then the following, etc. until we reach our desired commit. Another good example of a linked list would be a treasure hunt - each set of clues at a location refers to the next location. When we start from the beginning, we follow the clues from location to location (list items) until we reach our desired location (the treasure) - we necessarily have to start at the beginning or else we may get lost (clues may be dependent on prior knowledge).
+
+*Programming Questions*
+1. Our given pseudocode was missing a step - it was not checking to see if the item added was at the end of the list, and assigning the 'next' location appropriately.
+```js
+class LinkedList {
+  constructor(){
+    this._head = null;
+    this._current = null;
+  }
+
+  get head(){
+    return this._head;
+  }
+
+  get current(){
+    return this._current;
+  }
+
+  push(element){
+    console.log(`Adding ${element} to the linked list.`);
+    let node = {};
+    node.value = element;
+    node.next = null;
+    console.log(`The node now has node.value of ${element}, and node.next of null`);
+
+    console.log(`The head is currently: `);
+    console.log(this._head);
+    if (this._head === null){
+      console.log(`Since this._head was null, now setting head to node with value of ${node.value}, and this._current to the same node.`);
+      this._head = node;
+      this._current = node;
+    } else {
+      console.log(`Head was not null: changing current to have value of head`);
+      this._current = this._head;
+      while (this._current.next){
+        console.log(`Iterating through to the end of the linked list: assigning current to current.next`);
+        this._current = this._current.next;
+      }
+      this._current.next = node;
+      console.log(`Reached the end of the list - current.next is now ${node.value}`)
+      this._current = node;
+    }
+  }
+}
+let newList = new LinkedList();
+newList.push('item1');
+
+newList.push('item2');
+
+newList.push('item3');
+console.log(`The head is now: `);
+console.log(newList.head);
+console.log(`The current item in the list is now: `);
+console.log(newList.current);
+```
+2. 
+3. 
