@@ -14,7 +14,7 @@ function reverser(text){
   for (let index=0; index<text.length; index++){
     stack.push(text[index]);
   }
-  
+
   let reversed = [];
 
   // remove a character from the start of the (index=0) stack, and add it to our new array
@@ -22,7 +22,7 @@ function reverser(text){
     let character = stack.pop();
     reversed.push(character);
   }
-  
+
   // return the array as a string
   return reversed.join('');
 }
@@ -32,22 +32,84 @@ console.log(reverser('rAcecar'));
 console.log(reverser('two words'));
 ```
 
-2. Since we're using a queue, where we deal with the first item in the data structure and items in the order in which they were added, to implement a .pop method (where we remove the last item, first), we should iterate through the queue starting from the end - we might use a modified FOR loop.
+2. Since we're using a queue, where we deal with the first item in the data structure and items in the order in which they were added, to implement a stack functionality (where we remove the last item, first), we should iterate through the queue, removing items, checking if we've reached the original end of the queue, and return that original end of queue item, and add the items removed back until we hit the original end of the queue.
 PSEUDOCODE
-FUNCTION queueMirrorsPop INPUT text
+FUNCTION stackAsSingleQueue INPUT text
   INIT queue
   FOR each character IN text
     ADD character TO queue
   END FOR
-  INIT mirrored
-  FOR each character IN queue WHERE index is EQUAL TO the length of queue
-    ADD character TO mirror
-    DECREMENT index
-  END FOR if index EQUAL TO 0
+
+  INIT length EQUAL TO length of queue
+  FOR each item IN queue WHERE counter is EQUAL TO 0 at START
+    INIT temp EQUAL TO removed first queue item
+    IF counter+1 IS EQUAL TO length
+      RETURN temp
+    END IF
+    ADD temp TO end of queue
+  END FOR
 END FUNCTION
 
 ```js
+function stackMirror(text){
+
+  let queue = [];
+  for (let i=0; i<text.length; i++){
+    queue.push(text[i]);
+  }
+  console.log(`queue is set to ${queue}.`);
+
+  let length = queue.length;
+  for (let i=0; i<queue.length; i++){
+    console.log(`queue is in for loop and now ${queue}.`);
+    let temp = queue.shift();
+    console.log(`queue shifted, temp now: ${temp} and queue is ${queue}.`);
+    if (i+1 == length){
+      console.log(`Reached original end of queue, returning the original last item, which is now ${temp}.`)
+      return temp;
+    }
+    console.log(`adding ${temp} to end of queue.`);
+    queue.push(temp);
+  }
+
+}
+
+let value = stackMirror('woah');
+console.log(`${value} was returned from our stackMirror function`);
 ```
-    
-    
-    
+
+3.
+```js
+class QueueManager {
+  constructor(list){
+    this._list = list;
+  }
+
+  get list(){
+    return this._list;
+  }
+
+  set list(newList){
+    this._list = newList;
+  }
+
+  enqueue(addItem){
+    this._list.push(addItem);
+    console.log(`${addItem} added.`);
+  }
+
+  dequeue(){
+    let firstItem = this._list.shift();
+    console.log(`${firstItem} removed.`);
+    return firstItem;
+  }
+}
+
+let test = new QueueManager(['wow!']);
+
+console.log(test.list);
+test.enqueue('hello');
+console.log(test.list);
+test.dequeue();
+console.log(test.list);
+```
