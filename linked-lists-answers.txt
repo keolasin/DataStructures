@@ -3,11 +3,15 @@
 
 *Programming Questions*
 1. Our given pseudocode was missing a step - it was not checking to see if the item added was at the end of the list, and assigning the 'next' location appropriately.
+2. For checking for duplicates, I removed the duplicates by checking the current value in the list to the value of the next item in the list, then stored those values in an array as long as they were not duplicates. I am having some difficulty in changing the data structure/head to delete the duplicate nodes themselves and maintain the order of the linked list.
+3. To reverse, I simply iterated through the whole linked list and stored each value in a temporary array, then iterated backwards through my temporary array and called my previously created .push method on each value, thus reversing the original order.
+
 ```js
 class LinkedList {
   constructor(){
     this._head = null;
     this._current = null;
+
   }
 
   get head(){
@@ -18,108 +22,116 @@ class LinkedList {
     return this._current;
   }
 
-  push(element){
-    console.log(`Adding ${element} to the linked list.`);
-    let node = {};
-    node.value = element;
-    node.next = null;
-    console.log(`The node now has node.value of ${element}, and node.next of null`);
-
-    console.log(`The head is currently: `);
-    console.log(this._head);
-    if (this._head === null){
-      console.log(`Since this._head was null, now setting head to node with value of ${node.value}, and this._current to the same node.`);
-      this._head = node;
-      this._current = node;
-    } else {
-      console.log(`Head was not null: changing current to have value of head`);
-      this._current = this._head;
-      while (this._current.next){
-        console.log(`Iterating through to the end of the linked list: assigning current to current.next`);
-        this._current = this._current.next;
-      }
-      this._current.next = node;
-      console.log(`Reached the end of the list - current.next is now ${node.value}`)
-      this._current = node;
-    }
-  }
-}
-let newList = new LinkedList();
-newList.push('item1');
-
-newList.push('item2');
-
-newList.push('item3');
-console.log(`The head is now: `);
-console.log(newList.head);
-console.log(`The current item in the list is now: `);
-console.log(newList.current);
-```
-2. 
-```js
-class LinkedList {
-  constructor(){
-    this._head = null;
-    this._current = null;
-    this._size = 0;
+  set head(value){
+    this._head = value;
   }
 
-  get head(){
-    return this._head;
-  }
-
-  get current(){
-    return this._current;
-  }
-  
-  get size(){
-    return this._size;
+  set current(value){
+    this._current = value;
   }
 
   push(element){
-    console.log(`Adding ${element} to the linked list.`);
+    console.log(`.push method called: adding ${element} to the linked list.`);
+
     let node = {};
     node.value = element;
     node.next = null;
+
     console.log(`The node object now has node.value of ${element}, and node.next of null`);
-
     console.log(`The head is currently: `);
-    console.log(this._head);
-    if (this._head === null){
+    console.log(this.head);
+
+    if (this.head === null){
       console.log(`Since this._head was null, now setting head to be the node object with value of ${node.value}, and this._current to the same node.`);
-      this._head = node;
-      this._current = node;
+      this.head = node;
+      this.current = node;
+
     } else {
+
       console.log(`Head was not null: changing current to have value of head`);
-      this._current = this._head;
-      while (this._current.next){
-        console.log(`Iterating through to the end of the linked list: assigning current to current.next`);
-        this._current = this._current.next;
+      this.current = this.head;
+
+      while (this.current.next){
+        this.current = this.current.next;
       }
-      this._current.next = node;
+
+      this.current.next = node;
       console.log(`Reached the end of the list - current.next is now ${node.value}`)
-      this._current = node;
+      this.current = node;
+    }
+    console.log('End of push method \n');
+  }
+
+  removeDuplicates(){
+    this.current = this.head;
+    console.log('Starting remove duplicates, current is now at head, and linked list is: ');
+    console.log(this.current);
+    let temp = [];
+    while(this.current.next){
+      console.log('Looping, current is now at: ');
+      console.log(this.current);
+
+      if(this.current.value == this.current.next.value){
+        console.log(`Found a duplicate`);
+        this.current = this.current.next;
+      } else {
+        temp.push(this.current.value);
+        this.current = this.current.next;
+      }
     }
 
-    this._size++;
+    console.log(`End of removeDuplicates method, head is now: `);
+    console.log(this.head);
+    console.log(`Our removed duplicates are: ${temp}`);
+    console.log('\n');
   }
-  
-  removeDuplicates(){
-    for (let i = 0; i < this._size-1; i++){
+
+  reverser(){
+    this.current = this.head;
+
+    let temp = [];
+
+    while (this.current){
+      temp.push(this.current.value);
+      this.current = this.current.next;
+    }
+    console.log(`Temp is now: ${temp}`);
+    this.head = null;
+    for (let i = temp.length-1; i>=0; i--){
+      this.push(temp[i]);
+    }
   }
-  
 }
-let newList = new LinkedList();
-newList.push('item1');
-newList.push('item2');
-newList.push('item3');
-console.log(`The head is now: `);
-console.log(newList.head);
+
+const testList = new LinkedList();
+console.log('\nNEW TEST FOR push FUNCTION\n');
+testList.push('item1');
+testList.push('item2');
+testList.push('item3');
+console.log(`\nThe head of testList is now: `);
+console.log(testList.head);
 console.log(`The current item in the list is now: `);
-console.log(newList.current);
-console.log('The size of the linkedList is now: ' +newList.size);
-newList.push('item3');
+console.log(testList.current);
 
+console.log('\n\n\nNEW TEST FOR removeDuplicates FUNCTION\n\n\n');
 
+const testDuplicates = new LinkedList();
+testDuplicates.push('1');
+testDuplicates.push('1');
+testDuplicates.push('2');
+testDuplicates.push('3');
+testDuplicates.push('2');
+testDuplicates.removeDuplicates();
+console.log(`\nThe head of testDuplicates is now: `);
+console.log(testDuplicates.head);
 
-3. 
+console.log('\n\n\nNEW TEST FOR reverser FUNCTION\n\n\n');
+
+const testReverse = new LinkedList();
+testReverse.push('1');
+testReverse.push('2');
+testReverse.push('3');
+testReverse.reverser();
+console.log(`\nThe head of testReverse is now: `);
+console.log(testReverse.head);
+```
