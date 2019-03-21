@@ -37,18 +37,11 @@ class LinkedList {
     node.value = element;
     node.next = null;
 
-    console.log(`The node object now has node.value of ${element}, and node.next of null`);
-    console.log(`The head is currently: `);
-    console.log(this.head);
-
     if (this.head === null){
-      console.log(`Since this._head was null, now setting head to be the node object with value of ${node.value}, and this._current to the same node.`);
       this.head = node;
       this.current = node;
 
     } else {
-
-      console.log(`Head was not null: changing current to have value of head`);
       this.current = this.head;
 
       while (this.current.next){
@@ -56,10 +49,8 @@ class LinkedList {
       }
 
       this.current.next = node;
-      console.log(`Reached the end of the list - current.next is now ${node.value}`)
       this.current = node;
     }
-    console.log('End of push method \n');
   }
 
   removeDuplicates(){
@@ -68,9 +59,6 @@ class LinkedList {
     console.log(this.current);
     let temp = [];
     while(this.current.next){
-      console.log('Looping, current is now at: ');
-      console.log(this.current);
-
       if(this.current.value == this.current.next.value){
         console.log(`Found a duplicate`);
         this.current = this.current.next;
@@ -80,13 +68,17 @@ class LinkedList {
       }
     }
 
-    console.log(`End of removeDuplicates method, head is now: `);
-    console.log(this.head);
-    console.log(`Our removed duplicates are: ${temp}`);
-    console.log('\n');
+    this.head = null;
+    for (let i = 0; i<temp.length; i++){
+      this.push(temp[i]);
+    }
+
+    console.log(`Our removed duplicates are: ${temp}\n`);
+    console.log(`End of removeDuplicates method`);
   }
 
   reverser(){
+    console.log(`\nReverse method called\n`);
     this.current = this.head;
 
     let temp = [];
@@ -95,7 +87,9 @@ class LinkedList {
       temp.push(this.current.value);
       this.current = this.current.next;
     }
-    console.log(`Temp is now: ${temp}`);
+    console.log(`Temp is now: ${temp}, going to iterate backwards and add temp items to linked list\n`);
+
+
     this.head = null;
     for (let i = temp.length-1; i>=0; i--){
       this.push(temp[i]);
@@ -113,7 +107,7 @@ console.log(testList.head);
 console.log(`The current item in the list is now: `);
 console.log(testList.current);
 
-console.log('\n\n\nNEW TEST FOR removeDuplicates FUNCTION\n\n\n');
+console.log('\n\nNEW TEST FOR removeDuplicates FUNCTION\n\n');
 
 const testDuplicates = new LinkedList();
 testDuplicates.push('1');
@@ -121,11 +115,12 @@ testDuplicates.push('1');
 testDuplicates.push('2');
 testDuplicates.push('3');
 testDuplicates.push('2');
+testDuplicates.push('1');
 testDuplicates.removeDuplicates();
 console.log(`\nThe head of testDuplicates is now: `);
 console.log(testDuplicates.head);
 
-console.log('\n\n\nNEW TEST FOR reverser FUNCTION\n\n\n');
+console.log('\n\nNEW TEST FOR reverser FUNCTION\n\n');
 
 const testReverse = new LinkedList();
 testReverse.push('1');
