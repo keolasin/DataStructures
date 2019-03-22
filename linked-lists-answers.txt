@@ -31,8 +31,6 @@ class LinkedList {
   }
 
   push(element){
-    console.log(`.push method called: adding ${element} to the linked list.`);
-
     let node = {};
     node.value = element;
     node.next = null;
@@ -59,7 +57,7 @@ class LinkedList {
     console.log(this.current);
     let temp = [];
     while(this.current.next){
-      if(this.current.value == this.current.next.value){
+      if(temp.indexOf(this.current.value) >= 0){
         console.log(`Found a duplicate`);
         this.current = this.current.next;
       } else {
@@ -68,12 +66,13 @@ class LinkedList {
       }
     }
 
+    console.log(`Found all duplicates - resetting head`);
+    console.log(`Our removed duplicates are: ${temp}\n`);
+
     this.head = null;
     for (let i = 0; i<temp.length; i++){
       this.push(temp[i]);
     }
-
-    console.log(`Our removed duplicates are: ${temp}\n`);
     console.log(`End of removeDuplicates method`);
   }
 
@@ -87,7 +86,7 @@ class LinkedList {
       temp.push(this.current.value);
       this.current = this.current.next;
     }
-    console.log(`Temp is now: ${temp}, going to iterate backwards and add temp items to linked list\n`);
+    console.log(`Temp is now: ${temp}, going to iterate backwards and add temp items to linked list`);
 
 
     this.head = null;
@@ -120,7 +119,7 @@ testDuplicates.removeDuplicates();
 console.log(`\nThe head of testDuplicates is now: `);
 console.log(testDuplicates.head);
 
-console.log('\n\nNEW TEST FOR reverser FUNCTION\n\n');
+console.log('\n\nNEW TEST FOR reverser FUNCTION\n');
 
 const testReverse = new LinkedList();
 testReverse.push('1');
