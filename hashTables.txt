@@ -1,0 +1,128 @@
+1. A hash table is a data structure that maps key-value pairs to unique indices in an array, where the index of a certain key-value pair can be stored using a hash code that converts the unique key into a number, that is then simplified and associated with an index in the array.
+
+2. Hashing refers to the conversion of a unique key from a key-value pair to a numeric identifier called a hash code, which can be further simplified for use in the hash table's internal array. By referencing the hash code, we would expect to find the value for that unique key-value pair from which the hash code was originated.
+
+3. A hash table stores data in 'bins' located at unique indices of an array - we expect the data stored to be similarly formatted, such as an address book (name, address, phone number, etc.) for each bin, and each unique bin/index will reference a specific key-value pair, for example: the unique key "John Doe" would have address, phone number, email values associated with it in that bin.
+
+4. Hash tables differ from objects in that objects are not necessarily sorted according to an index - we know where each key-value pair lives in a hash table due to being assigned a specific hash code for indexing in its array, while an object in some programming languages may not be referenced by such an index - only by key-value pairs. However, they are similar in that both should store similar information (name, address, phone number properties for unique persons in an address book).
+
+5.
+A list of pets and their unique names - hash table
+The name, age, and birthday of your best friend - object
+The name and location of every company in a given city - hash table
+All of the books checked out from a library by a particular individual - hash table
+The primary and secondary phone numbers for a contact - object
+
+Programming Questions:
+
+1.
+```js
+class HashTable{
+  constructor(){
+    this.list = [];
+  }
+
+  convertHashCode(hashCode){
+    let trueIndex = null;
+    let capacity = 10;
+    trueIndex = hashCode % capacity;
+    return trueIndex;
+  }
+
+  addToTable(property, value){
+    let temp = {};
+    temp[property] = value;
+
+    let hashCode = hash(property);
+    console.log(hashCode);
+    let index = this.convertHashCode(hashCode);
+    if(!this.list[index]){
+      this.list[index+1] = temp;
+    } else {
+      this.list[index] = temp;
+    }
+  }
+}
+
+let tim = new Customer('Tim', '555 111 2222', '123 street');
+
+let testTable = new HashTable();
+testTable.addToTable('name', tim.name);
+testTable.addToTable('Phone number', tim.phone);
+console.log(testTable.list);
+```
+
+2.
+
+Using the same hash table as above, we can create a Product class and assign items and their quantities there, then pass that info to the table:
+
+```js
+class HashTable{
+  constructor(){
+    this.list = [];
+  }
+
+  convertHashCode(hashCode){
+    let trueIndex = null;
+    let capacity = 64;
+    trueIndex = hashCode % capacity;
+    return trueIndex;
+  }
+
+  addToTable(property, value){
+    let temp = {};
+    temp[property] = value;
+
+    let hashCode = hash(property);
+
+    let index = this.convertHashCode(hashCode);
+
+    if(!this.list[index]){
+      this.list[index+1] = temp;
+    } else{
+      this.list[index] = temp;
+    }
+
+  }
+}
+
+let bananas = new Product('Bananas', 20);
+let tomatoes = new Product('Tomatoes', 5);
+
+let inventory = new HashTable();
+inventory.addToTable(bananas.item, bananas.quantity);
+inventory.addToTable(tomatoes.item, tomatoes.quantity);
+console.log(inventory.list);
+```
+
+3.
+```js
+class Archive{
+  constructor(publisher, publicationDate) {
+    this.publisher = publisher;
+    this.publicationDate = publicationDate;
+    this.list = []
+  }
+
+  add(publisher, pubDate) {
+    let temp = {}
+    temp[publisher] = pubDate;
+    temp[pubDate] = publisher;
+    this.list[hash(publisher)] = temp;
+    this.list[hash(pubDate)] = temp;
+  }
+
+  find(query) {
+    return this.list[hash(query)];
+  }
+}
+
+let newsCompany = new Archive();
+newsCompany.add('Guardian', '08/15/2019');
+newsCompany.add('NYT', '09/20/2000');
+newsCompany.add('CNN', '01/01/1999');
+
+console.log(newsCompany.find('CNN'));
+console.log(newsCompany.find('08/15/2019'));
+console.log(newsCompany.find('NYT'));
+```
