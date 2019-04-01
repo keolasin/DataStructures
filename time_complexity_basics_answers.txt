@@ -1,0 +1,25 @@
+1. Time complexity is a mathematical estimation of the time it takes for a program to execute, based on the functions/steps performed in the algorithm, and the size of the data input to that algorithm. We represent time complexity as a function based on the input size, n,  or f(n), or the rate the algorithm performs as the input size grows.
+
+2. Runtime can refer to the actual duration it takes an algorithm to run (say, 0.52 ms), or the time complexity of the algorithm, or the Big O notation of n, where we determine the time complexity function given the upper bound of data input size growing (the worst case scenario).
+
+3. Runtime (as time complexity) is calculated based on how many times the input data is run through, changing based on whether it's used in a loop, comparisons, or other function calls. For instance, one for loop will create a runtime of f(n), because it runs through all input at least once, a linear relationship. If we have multiple actions in an algorithm, we need to simply the function by removing constants (f(2n) would just be f(n)), and account for more complex data manipulations (f(n^2), or f(n*log(n))).
+
+4. Rating time complexities:
+
+1. Constant - most efficient
+2. Logarithmic 
+3. Linear
+4. Log-Linear
+5. Quadratic
+6. Exponential
+7. Factorial - least efficient
+
+5. Factorial - these are the recursive functions that we loop through at least once - where we call the algorithm within itself and feedback the same input n. These sorts of factorial functions come up when we compare all possible scenarios, such as in combinatorial probabilities, and many statistical efforts will rely on these underlying probabilities (determining binomial coefficients when amalyzing results from a clinical trial - we would use a factorial algorithm to generate our coefficients, that later help us build a binomial distribution and allowing us to complete our hypothesis testing statistics).
+
+6. If we reduce our algorithm, the most intensive aspect is the FOR call, where we loop through all data in the input array. Since we loop through all the data in the input at least once, it would have O(n) time complexity.
+
+7. Here, we are looping through all data in the array with the first FOR call, but then additionally looping through all data in the array in the nested for loop. Essentially, for each index in the array, we are comparing it against all the other indices in the same array - this would be a quadratic time complexity, or O(n^2).
+
+8. This would be exponential time complexity O(2^n), since for input greater than 2 we call the function itself twice, feeding each call a modified input value - basically calling/modifying each n for every n in the input, or O(n*n) = O(n^2).
+
+9. The linear O(n) time complexity algorithm would be the most efficient - we go through all the data only once, as opposed to the quadratic (O(n^2)) where we go through all the data at least once but for each one we compare it then to all other data points, and faster than the fibonacci sequence calculation, which is exponential time complexity (2^n).
