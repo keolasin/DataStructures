@@ -1,0 +1,37 @@
+1. Recursion - a series of steps with a step referencing/calling a previous step, causing a loop to be created, usually only broken out of if some condition is met. Iteration - Working through steps with no such looping/reference to previous steps necessary to complete the instructions. In recursion, it's possible for us to wind up in an infinite loop - without defining a base case/condition to break the loop, the program will continually reference those same steps and forever loop back. However, with iteration, there should be no such looping - we can complete an iterative function in a certain amount of time - however, we may end up with a more complicated set of instructions that can be harder to understand than a recursive set of instructions.\
+
+2. 
+1. Pascal's triangle can be determined by recursion.
+2. Calculating a golden ratio can be done via recursion.
+3. The fibonnaci sequence can be calculated by recursion.
+4. We can reach the end of a linked list recursively.
+5. Calculating factorials is done recursively - used in probability theory.
+6. In nature, we can see fractal patterns/trees evolve, a form of recursion - for instance, the branching of a tree or succulents, or the branching of a river.
+
+3. We should use recursion when the recursive function is much simpler to implement than the iterative function - a recursive function that is complicated or computationally slower than a faster, less complex iterative function would not be prudent. If we have a large, complicated iterative solution, or in instances where it's necessary to have simply understood code, recursion would be a better implementation.
+
+4. Factorial - 
+Recursive function:
+```js
+function factorial(n){
+  if (n < 0){
+    return -1; // error
+  }
+  if (n === 1 || n === 0){
+    return 1; // base case
+  } else {
+    return n*factorial(n-1);
+  }
+}
+```
+and the iterative function:
+```js
+function iterativeFactorial(n){
+  let current = 1;
+  for ( let i = 1; i <= n; i++){
+    current = current*i;
+  }
+  return current;
+}
+```
+
