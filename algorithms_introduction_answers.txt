@@ -1,0 +1,22 @@
+1.
+Making Tea:
+
+FUNCTION brewTea
+INIT kettleState TO cold (false)
+INIT stoveState TO off (false)
+
+IF kettleState IS false
+  WHILE kettleState IS NOT hot (true)
+    SET stoveState TO on (true)
+  END WHILE
+ELSE
+  DECREMENT ketteVolume
+  
+
+2.
+a) During World War II, message encryption played a pivotal role - an example of a successful algorithm would be that of the Navajo Code talkers encrypting messages through their language. They used simple ciphers (a ruleset for substituting letters in one language for a word in another) to create a coded message that the recipient could then decode by applying that same ruleset. This algorithm was successful - it was not broken by adversaries, unlike the German 'Enigma' machine/algorithm, which was solved by several competing intelligence officials (Alan Turing, notably).
+b) Polymerase Chain Reaction, invented by Kary Mullis in 1985, is a method of injecting and greatly amplifying genetic sequences. This method of DNA amplification was novel at the time as it was a series of steps that could be performed both simply and quicker than other methods at the time, while yielding a much more robust and higher quantity of the desired genetic sequence. PCR became a staple for many labs, and helped in allowing the human genome to be mapped in 2003.
+c) Grid cells are neurons in the brain that fire when the individual (rats, in this case) are in a certain location, which helps give that individual a literal map or sense of position in the world, and derive their name from the fact these cells are oriented in a triangular grid in the brain - unique from other cells that do not form such a grid. Here, there is an algorithm that assigns certain neurons to certain positions in space that the rat recognizes, which researchers hypothesize help with self-positioning in the world.
+
+3.
+An efficient algorithm is one that reaches a desired outcome quickly and correctly - if we have an algorithm that takes a long time, it is not particularly useful to us, and doubly so if the algorithm comes to the wrong result more often than not. Ideally, our perfect algorithm would always give us the best/most correct answer, instantly. However, in designing an algorithm, there may be some trade-offs between duration and accuracy.

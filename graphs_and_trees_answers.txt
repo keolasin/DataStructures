@@ -1,0 +1,137 @@
+1. A binary tree is a tree where each node can only have at most two children nodes, starting from a single root node, while other trees may have multiple children nodes for a single node.
+
+2. A heuristic is an educated guess that we can supply an algorithm to help it find a solution - the heuristic will implicitly not be all-encompassing - it's goal is to save the algorithm steps/time in finding the solution, and so may wind up contributing to mistakes or paths that the algorithm would otherwise not employ, but should overall help to reach the solution quicker. Another way to think of a heuristic would be as assigning an algorithm some degree of 'intuitiveness', where that intuition may sometimes be wrong, but when it's right, gets us to the solution quicker.
+
+3.
+
+4. Depth-first searches will go down the entirety of a branch (searching children nodes first), and if it fails to find the query, then will resume from the next node and go down all those children nodes (in a certain direction) before repeating, until the query is found. A breadth-first search will search each level of nodes before continuing onto the children nodes of that searched level. It will repeat searching sibling nodes at a certain level before continuing onto the children if it fails to find the query. A simple way to think of it would be as a prospector searching for gold - the prospector can dig deep in a small area they think has gold (depth first) before moving to another area, or, the prospector can dig shallowly over a large area before digging deeper.
+
+5. A graph that is undirected, a-cyclic, and unweighted would be a graph that:
+is able to be traversed in multiple directions given any two joined nodes (undirected);
+will not form a loop, as nodes are not joined in such a way to allow a parent node to be revisited as from a deeper nested child as part of traversing the node in a certain direction (a-cyclic);
+and will not convey any associated cost or weight with traversing to a certain node (unweighted).
+
+6. A binary search tree would be an a-cyclic, unweighted, and directed graph, directed in that we should be searching down a branch of nodes from the root node. It could be undirected in that what is important is that any node only has at most two child nodes it connects to.
+
+Programming Questions
+1. Since traversing the binary tree will be similar to a linked list, we use a node object that we add to a root/head object, where added values are nested. However, we have both a left and right branch to use for nested children, so we want to ensure we assign our node object to the correct branch depending on its value/when it is inserted, thus we need to compare if our current value to be added is greater or less than a node in the root object, and then travel down left or right and assign when we find an empty left/right position for our added data.
+```js
+// node class for creating new node objects
+class createNode {
+  constructor(value){
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+// our binary tree
+class binaryTree{
+  constructor(){
+    this.root = {};
+    this.currentNode = null;
+  }
+
+  //adding new node with specific value to the tree
+  addToTree(value){
+    let node = new createNode(value);
+    console.log(`New node to add: ${node.value}`);
+
+    if (this.root.value === undefined){
+      this.root = node;
+      console.log(`Root was undefined, adding node`);
+    } else {
+      this.currentNode = this.root;
+      this.branchExplore(node);
+    }
+  }
+
+
+  // finding an empty node to use
+  branchExplore(node){
+
+    // loop through the nodes
+    while(this.currentNode){
+
+      //left branch selected
+      if(node.value < this.currentNode.value){
+        console.log(`Going down left branch`);
+        if(this.currentNode.left === null){
+          // empty node.left found, adding new node here
+          this.currentNode.left = node;
+          break;
+        } else {
+          // advance node to left and continue looping
+          this.currentNode = this.currentNode.left;
+        }
+      }
+
+      //right branch selected
+      if(node.value > this.currentNode.value){
+        console.log(`Going down right branch`);
+        if(this.currentNode.right === null){
+          // empty node.right found, adding new node here
+          this.currentNode.right = node;
+          break;
+        } else {
+          // advance node to right and continue looping
+          this.currentNode = this.currentNode.right;
+        }
+      }
+    }
+  }
+
+  find(value){
+    this.currentNode = this.root;
+
+    if (this.root.value === value){
+      console.log(`Found ${value}`);
+    } else {
+
+      // loop through nodes
+      while(this.currentNode){
+
+        if(this.currentNode.value === value){
+          console.log (`Found ${value}`)
+          return this.currentNode;
+        }
+
+        //left branch
+        if(value < this.currentNode.value){
+          console.log(`Going down left branch`);
+          if(this.currentNode.left === null){
+            break;
+          } else {
+            this.currentNode = this.currentNode.left;
+          }
+        }
+
+        //right branch
+        if(value > this.currentNode.value){
+          console.log(`Going down right branch`);
+          if(this.currentNode.right === null){
+            break;
+          } else{
+            this.currentNode = this.currentNode.right;
+          }
+        }
+      }
+    }
+  }
+}
+
+let testBinary = new binaryTree();
+testBinary.addToTree(8);
+testBinary.addToTree(3);
+testBinary.addToTree(10);
+testBinary.addToTree(14);
+testBinary.addToTree(1);
+testBinary.addToTree(6);
+testBinary.addToTree(4);
+testBinary.addToTree(7);
+testBinary.addToTree(13);
+console.log(testBinary.root);
+console.log(testBinary.find(6));
+```
+
+2. For this, we similarly need to scour the tree as we did earlier, but now we'll store the two compared nodes and count the number of branches it takes to go from the root down to one, then the root down to another and sum up the jumps we make between nodes.
