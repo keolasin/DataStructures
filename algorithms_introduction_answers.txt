@@ -2,15 +2,85 @@
 Making Tea:
 
 FUNCTION brewTea
-INIT kettleState TO cold (false)
-INIT stoveState TO off (false)
+  SET kettleTemp TO cold (0)
+  SET kettleVolume TO 0
+  SET stoveState TO off (false)
+  SET waterVolume TO 10
+  SET cupState TO false (not brewed)
+  SET addedTeabag TO false
+  SET pourVolume TO 5
+  SET cupVolume TO 0
+  
+  IF kettleVolume IS LESS THAN 5
+    ADD waterVolume TO kettleVolume
+  END IF
+  
+  IF kettleTemp IS LESS THAN 100
+    WHILE kettleTemp IS LESS THAN 100
+      SET stoveState TO on (true)
+      INCREMENT kettleTemp BY 5
+    END WHILE
+    SET stoveState TO off 
+  END IF
+  
+  IF kettleVolume IS NOT LESS THAN 5 AND cupVolume IS 0
+    DECREMENT kettleVolume BY pourVolume
+    ADD pourVolume TO cup
+  END IF
+  
+  IF cupState IS NOT true (brewed)
+    SET addedTeabag TO true
+    SET cupState TO TRUE (brewed)
+  END IF
+END FUNCTION
 
-IF kettleState IS false
-  WHILE kettleState IS NOT hot (true)
-    SET stoveState TO on (true)
+Doing dishes
+FUNCTION doDishes INPUT dirtyDishes
+  SET dishwasherLoad TO 0
+  SET dishwasherRunning TO false
+  SET dishRuntime TO 60 minutes
+  SET dishesClean TO false
+  WHILE dirtyDishes IS GREATER THAN 0
+    INCREMENT dishwasherLoad BY 1
+    DECREMENT dirtyDishes BY 1
   END WHILE
-ELSE
-  DECREMENT ketteVolume
+  
+  IF dishwasherLoad IS NOT 0
+    SET dishwasherRunning TO true
+  END IF
+  
+  IF dishwasherRunning IS EQUAL TO TRUE
+    WAIT for dishRuntime
+    SET dishesClean TO true
+  END IF
+  
+  IF dishsesClean IS EQUAL TO true
+    WHILE dishwasherLoad IS NOT EQUAL TO 0
+      DECREMENT dishwasherLoad BY 1
+      INCREMENT cabinetDishes BY 1
+    END WHILE
+  END IF
+END FUNCTION
+
+Trigger cell apoptosis
+
+FUNCTION apoptosis INPUT cellNutrients AND toxicTrigger
+  IF cellNutrients IS LESS THAN 50 OR toxicTrigger IS EQUAL TO true
+    ADD initiateDeath TO cellNucleus
+  END IF
+  
+  IF cellNucleus HAS PROPERTY inititateDeath EQUAL TO true
+    WHILE dna IS GREATER THAN 0
+      INCREMENT apoptosisEnzymes BY 10
+      DECREMENT dna BY 1
+      DECREMENT apoptosisEnzymes BY 1
+      INCREMENT macrophageAttractors BY 1
+    END WHILE
+  END IF
+  
+  RETURN macrophageAttractors
+END FUNCTION
+  
   
 
 2.
