@@ -8,7 +8,7 @@
 5. Calculating factorials is done recursively - used in probability theory.
 6. In nature, we can see fractal patterns/trees evolve, a form of recursion - for instance, the branching of a tree or succulents, or the branching of a river.
 
-3. We should use recursion when the recursive function is much simpler to implement than the iterative function - a recursive function that is complicated or computationally slower than a faster, less complex iterative function would not be prudent. If we have a large, complicated iterative solution, or in instances where it's necessary to have simply understood code, recursion would be a better implementation.
+3. We should use recursion when the recursive function is much simpler to implement than the iterative function - a recursive function that is complicated or computationally slower than a faster, less complex iterative function would not be prudent. If we have a large, complicated iterative solution, or in instances where it's necessary to have simply understood code, recursion would be a better implementation, however, sometimes it may be that a recursive solution is computationally intensive with non-obvious base cases, so the iterative function would still be better. For example, the fibonacci recursive function is computationally complex, while being simply understood 
 
 4. Factorial - 
 Recursive function:
