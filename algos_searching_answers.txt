@@ -1,0 +1,46 @@
+1. A real-life linear search would be searching for a certain book by an author in a library. Knowing their last name and book title, we would go to the appropriate shelf (McDowell, so 'M') then search linearly/alphabetically through until we find McDowell - we would first encounter all the Ma- names (like MacArthur), then Mb- names (if there are any), then Mc names, and we'd continue in this fashion until we found our target book.
+
+2. A real-life binary search would be finding a specific size of screw in a hardware store. Since screws are sorted by bins, if we encounter a bin where the screws are larger than desired, we can discard that bin and all bins larger as well. If we encounter a bin where the screws are smaller than our target, we can discard all those smaller bins. We can continue in this way until we find our desired screw size.
+
+3. For linear search, finding g alphabetically means we have to go through all the preceding letters - so g would be found on the 7th loop through of a linear search (since it is the 7th letter).
+
+4. For binary search, finding g means comparing the middle value of the 7 letters (D) and checking if it is less than or larger than the target. On the first iterartion, since D is less than g (index of 4<7), we set a new low of one plus the mid value and start another loop (2nd iteration) - now, our mid value of F (or 6, since 5+7/2 = 6) is still less than g (7). So, we set a new low of one plus the mid value (now 7) and start another loop (3rd iteration). Now, low, mid, and high are all the same value, meaning we're at the last item in our list - we then check to make sure it is our target value ('G'). We've now reached 'G' only after 3 iterations of our binary search, rather than the 7 iterations it took from our linear search.
+
+5. Unfortunately, since our collection is unsorted, we should use a linear search. Since the collection is rather large as well, it will take some time to complete our search, especially if our target is near the end of the list. The reason we cannot do a binary search is that we would potentially miss our target value half the time - in the initial split, where we discard half the list, because the list is unsorted, the value may be on either the left or the right side of the middle, and we have no way of knowing. Similarly, our values stored at the low and high ends on the first iteration may not be logical - we could have a high value at the low end, and vice versa, and this corruption would propagate for each iteration, where we compare our value against an untrue high/low.
+
+6. For a sorted collection of a million items, we can now use a binary search. Since we know that the value will be reliably left/right of a certain mid value, and the values at the low/high ends are accurate, we can now safely pinpoint the location of our target in the list, and even though the list is large, we can do it much faster than we would with a linear search (the first iteration already brings down the values to search by half).
+
+Programming Assignment:
+1.
+```js
+function binarySearch(sortedList, target){
+  let low = 0;
+  let high = sortedList.length-1;
+  let mid = null;
+  let loopCount = 0;
+
+  while (low<=high) {
+    loopCount++;
+    mid = Math.floor( (low+high) / 2 );
+    if(sortedList[mid] > target){
+      high = mid - 1;
+    } else if (sortedList[mid] < target){
+      low = mid + 1;
+    } else {
+      if (sortedList[mid] === target){
+        return `Found ${target} at index ${mid} and looped through ${loopCount} times`;
+      }
+    }
+  }
+  return `${target} not found.`;
+}
+let test1 = ['a','b','c','d','e','f','g','h','i','j','k'];
+
+let test2 = ['a', 'aardvark', 'aladin', 'albatross', 'green', 'monkey', 'spider', 'zamboni', 'zebra' ];
+
+console.log(binarySearch(test1, 'g'));
+console.log(binarySearch(test1, 'z'));
+console.log(binarySearch(test2, 'albatross'));
+```
+
+2.
