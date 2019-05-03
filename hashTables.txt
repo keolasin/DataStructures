@@ -26,120 +26,273 @@ class Customer{
   }
 }
 
-class Product {
-  constructor(item, quantity){
-    this.item = item;
-    this.quantity = quantity;
-  }
-}
-
-class NewsPiece {
-  constructor(pubDate, publisher){
-    this.pubDate = pubDate;
-    this.publisher = publisher;
-  }
-}
-
-class HashTable{
+// customer hash table
+class CustomerTable{
   constructor(){
-    this.table = new Array(100);
+    this.table = new Array(10);
   }
 
-  // get an index for the hash table from a given hash code
-  convertHash(hash){
-    let tableIndex = null;
+  // creating a hash code from the 'name' property and converting it to an index, to be assigned to the hash table array
+  createHash(someData){
+    let hashCode = hash(someData['phone']);
     let capacity = this.table.length;
-    tableIndex = hash % capacity;
+    let tableIndex = hashCode % capacity;
+
+    // console log hash code and table index
+    console.log(`Our numeric hash code is: ${hashCode}`);
+    console.log(`Which is converted to an index for the table, initially assigned to index of: ${tableIndex}`);
+
     return tableIndex;
   }
 
-  addToTable(someObject, property){
-    // use the given property of the object provided for hash code
-    let hashCode = hash(someObject[property]);
-    let index = this.convertHash(hashCode);
+  addToTable(someData){
+    // use a unique property of the object provided for hash code
+    console.log(`\naddToTable called for ${someData['phone']}`);
+    let index = this.createHash(someData);
 
-    // loop through the table searching for first empty index based on initial hashCode/index provided
-    do {
-      if(!this.table[index]){
-        console.log(`Empty index found in table, ${someObject[property]} assigned index of: ${index}`);
-        this.table[index] = someObject;
-        break;
+    // check if index assigned is open/available for assignment
+    if(!this.table[index]){
+      console.log(`Empty index found in table, ${someData['name']} assigned index of: ${index}`);
+      this.table[index] = someData;
+    }
+    // collision handling
+    else { // if index was not open (already contains data), increment index until available index found
+      while(this.table[index]){
+        index++;
+        console.log(`Collision found, index increased and is now: ${index}`);
+        if(!this.table[index]){
+          console.log(`Empty index found in table, ${someData['name']} assigned index of: ${index}`);
+          this.table[index]=someData;
+          break;
+        }
       }
-
-      index++;
-
-    } while(this.table[index]);
-
-  }
-
-  addToValue(valueToAdd, queryByProperty, key){
-    let foundItem = this.search(queryByProperty, key);
-    foundItem += valueToAdd;
-    console.log(`Added ${valueToAdd} to ${queryByProperty}, value is now ${foundItem}`);
+    }
   }
 
   //search function for hash table
-  search(queryByProperty, key){
-    let hashCode = hash(queryByProperty);
-    let index = this.convertHash(hashCode);
+  search(query){
+    console.log(`\nSearch started for ${query}`);
+    let index = this.createHash(query);
 
-    do {
-      if(this.table[index]){
-        if(this.table[index].hasOwnProperty(key)){
-          console.log(`Found ${queryByProperty}, value is ${this.table[index][key]}`);
-          return this.table[index][key];
+    // check if hashed index values match
+    if(this.table[index]){
+      if(this.table[index]['phone'] === query['phone']){
+        console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+        return this.table[index];
+      } else {
+        while(this.table[index]['phone'] !== query['phone']){
+          index++;
+          if(this.table[index]['phone'] === query['phone']){
+            console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+            return this.table[index];
+          }
+          if (index > this.table.length){
+            console.log(`${query['phone']} not found`);
+            return null;
+          }
         }
       }
-       else {
-        index += 1;
-      }
-    } while(this.table.length);
-
-  console.log(`${queryByProperty} not found`);
-  return -1;
+    }
+    console.log (`${query} not found`);
+    return null;
   }
 }
 
 
 // Customer tests (question 1)
-let tim = new Customer('Tim', '555 111 2222', '123 street');
-let stew = new Customer('Stew', '444 222 1111', '555 street');
-let jess = new Customer('Jess', '123 444 5555', '456 street');
-let bob = new Customer('Bob', '999 000 3333', '789 street');
+let jess = new Customer('Jess', '333 333 3333', '456 street');
 
-let testTable = new HashTable();
+let testTable = new CustomerTable();
 
-testTable.addToTable(tim, 'name');
-testTable.addToTable(stew, 'name');
-testTable.addToTable(bob, 'name');
-testTable.addToTable(jess, 'name');
+testTable.addToTable({name: 'Tim', phone: '111 111 1111', address: '123 street'});
+testTable.addToTable(jess);
 
-testTable.search('Stew', 'phone');
-testTable.search('Bob', 'phone');
+console.log(testTable.search({name: 'Tim', phone: '111 111 1111', address: '123 street'}));
+console.log(testTable.search(jess));
 
+
+// question 2
+class Product {
+  constructor(productID, name, quantity){
+    this.productID = productID;
+    this.name = name;
+    this.quantity = quantity;
+  }
+}
+
+class InventoryTable{
+  constructor(){
+    this.table = new Array(10);
+  }
+
+  // creating a hash code from the 'name' property and converting it to an index, to be assigned to the hash table array
+  createHash(someData){
+    let hashCode = hash(someData['productID']);
+    let capacity = this.table.length;
+    let tableIndex = hashCode % capacity;
+
+    // console log hash code and table index
+    console.log(`Our numeric hash code is: ${hashCode}`);
+    console.log(`Which is converted to an index for the table, initially assigned to index of: ${tableIndex}`);
+
+    return tableIndex;
+  }
+
+  addToTable(someData){
+    // use a unique property of the object provided for hash code
+    console.log(`\naddToTable called for ${someData['name']}`);
+    let index = this.createHash(someData);
+
+    // check if index assigned is open/available for assignment
+    if(!this.table[index]){
+      console.log(`Empty index found in table, ${someData['name']} assigned index of: ${index}`);
+      this.table[index] = someData;
+    }
+    // collision handling
+    else { // if index was not open (already contains data), increment index until available index found
+      while(this.table[index]){
+        index++;
+        console.log(`Collision found, index increased and is now: ${index}`);
+        if(!this.table[index]){
+          console.log(`Empty index found in table, ${someData['name']} assigned index of: ${index} using productID (${someData['productID']})`);
+          this.table[index]=someData;
+          break;
+        }
+      }
+    }
+  }
+
+  //search function for hash table
+  search(query){
+    console.log(`\nSearch started for ${query}`);
+    let index = this.createHash(query);
+
+    // check if hashed index values match
+    if(this.table[index]){
+      if(this.table[index]['productID'] === query['productID']){
+        console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+        return this.table[index];
+      } else {
+        while(this.table[index]['productID'] !== query['productID']){
+          index++;
+          if(this.table[index]['name'] === query['name']){
+            console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+            return this.table[index];
+          }
+          if (index > this.table.length){
+            console.log(`${query['name']} not found`);
+            return null;
+          }
+        }
+      }
+    }
+    console.log (`${query} not found`);
+    return null;
+  }
+}
 
 // Inventory tests (question 2)
-let banana = new Product('Banana', 20);
-let tomato = new Product('Tomato', 5);
+let banana = new Product('3287', 'Banana', 20); // uses PLU code
+let tomato = new Product('3061', 'Tomato', 5);
 
-let testInventory = new HashTable();
+let testInventory = new InventoryTable();
 
-testInventory.addToTable(tomato, 'item');
-testInventory.addToTable(banana, 'item');
-testInventory.search('Banana', 'quantity');
-testInventory.search('Tomato', 'quantity');
-testInventory.addToValue(5, 'Banana', 'quantity');
+testInventory.addToTable(banana);
+testInventory.addToTable(tomato);
+console.log(testInventory.search( { productID: '3287', name: 'banana'} ));
+console.log(testInventory.search( { productID: '3061', name: 'tomato'} ));
+
+
+// Question 3
+class NewsPiece {
+  constructor(pubDate, publisher, article){
+    this.pubDate = pubDate;
+    this.publisher = publisher;
+    this.article = article
+  }
+}
+
+class PaperTable{
+  constructor(){
+    this.table = new Array(10);
+  }
+
+  // creating a hash code from the 'name' property and converting it to an index, to be assigned to the hash table array
+  createHash(someData){
+    let hashCode = hash(someData['publisher']+someData['date']);
+    let capacity = this.table.length;
+    let tableIndex = hashCode % capacity;
+
+    // console log hash code and table index
+    console.log(`Our numeric hash code is: ${hashCode}`);
+    console.log(`Which is converted to an index for the table, initially assigned to index of: ${tableIndex}`);
+
+    return tableIndex;
+  }
+
+  addToTable(someData){
+    // use a unique property of the object provided for hash code
+    console.log(`\naddToTable called for ${someData['publisher']}`);
+    let index = this.createHash(someData);
+
+    // check if index assigned is open/available for assignment
+    if(!this.table[index]){
+      console.log(`Empty index found in table, ${someData['name']} assigned index of: ${index}`);
+      this.table[index] = someData;
+    }
+    // collision handling
+    else { // if index was not open (already contains data), increment index until available index found
+      while(this.table[index]){
+        index++;
+        console.log(`Collision found, index increased and is now: ${index}`);
+        if(!this.table[index]){
+          console.log(`Empty index found in table, ${someData['publisher']} assigned index of: ${index}.`);
+          this.table[index]=someData;
+          break;
+        }
+      }
+    }
+  }
+
+  //search function for hash table
+  search(query){
+    console.log(`\nSearch started for ${query}`);
+    let index = this.createHash(query);
+
+    // check if hashed index values match
+    if(this.table[index]){
+      if(this.table[index]['date'] === query['date'] && this.table[index]['publisher'] === query['publisher']){
+        console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+        return this.table[index];
+      } else {
+        while(this.table[index]['date'] !== query['date']){
+          index++;
+          if(this.table[index]['publisher'] === query['publisher']){
+            console.log(`${query} found at index of ${index}, contains ${this.table[index]}`);
+            return this.table[index];
+          }
+          if (index > this.table.length){
+            console.log(`${query['publisher']} for date ${query['date']} not found`);
+            return null;
+          }
+        }
+      }
+    }
+    console.log (`${query} not found`);
+    return null;
+  }
+}
 
 // Newspaper tests (question 3)
-let guardian = new NewsPiece('02/28/1950', 'The Guardian');
-let nyt = new NewsPiece('01/15/2019', 'New York Times');
+let guardian = new NewsPiece('02/28/1950', 'The Guardian', 'some filler text');
+let nyt = new NewsPiece('01/15/2019', 'New York Times', 'text of article lorem ipsum');
 
-let testArchive = new HashTable();
+let testArchive = new PaperTable();
 
-testArchive.addToTable(guardian, 'publisher');
+testArchive.addToTable(guardian);
 testArchive.addToTable(nyt, 'publisher');
 
-testArchive.search('The Guardian', 'pubDate');
-testArchive.search('New York Times', 'pubDate');
-testArchive.search('02/28/1950', 'publisher');
+console.log(testArchive.search({ pubDate: '02/28/1950', publisher: 'The Guardian' }));
+console.log(testArchive.search({ pubDate: '01/15/2019', publisher: 'New York Times' }));
+
 ```
