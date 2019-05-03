@@ -2,7 +2,7 @@
 
 2. A heuristic is an educated guess that we can supply an algorithm to help it find a solution - the heuristic will implicitly not be all-encompassing - it's goal is to save the algorithm steps/time in finding the solution, and so may wind up contributing to mistakes or paths that the algorithm would otherwise not employ, but should overall help to reach the solution quicker. Another way to think of a heuristic would be as assigning an algorithm some degree of 'intuitiveness', where that intuition may sometimes be wrong, but when it's right, gets us to the solution quicker.
 
-3.
+3. A similar problem to the shortest path problem might be in simulating neuronal activity in the brain - being a complex, interconnected system, it's hard to determine how certain processes arise from simple biochemical functions and interactions between neurons. However, a helpful heuristic we can apply is one related to plasticity and training - as neurons that work together to a certain, desired solution (such as recalling a memory correctly), those neurons that were used in the process become more strongly linked and attuned to the firing of those in that specific path. Conversely, adjacent neurons that were not useful or hinderances to that solution can also receive negative feedback - they become less receptive. In this way, we can model simple neural networks, and apply their problem-solving approach (reinforcement/dis-incentivation)to other problems.
 
 4. Depth-first searches will go down the entirety of a branch (searching children nodes first), and if it fails to find the query, then will resume from the next node and go down all those children nodes (in a certain direction) before repeating, until the query is found. A breadth-first search will search each level of nodes before continuing onto the children nodes of that searched level. It will repeat searching sibling nodes at a certain level before continuing onto the children if it fails to find the query. A simple way to think of it would be as a prospector searching for gold - the prospector can dig deep in a small area they think has gold (depth first) before moving to another area, or, the prospector can dig shallowly over a large area before digging deeper.
 
@@ -15,9 +15,11 @@ and will not convey any associated cost or weight with traversing to a certain n
 
 Programming Questions
 1. Since traversing the binary tree will be similar to a linked list, we use a node object that we add to a root/head object, where added values are nested. However, we have both a left and right branch to use for nested children, so we want to ensure we assign our node object to the correct branch depending on its value/when it is inserted, thus we need to compare if our current value to be added is greater or less than a node in the root object, and then travel down left or right and assign when we find an empty left/right position for our added data.
+2. For this, we similarly need to scour the tree as we did earlier, but now we'll store the two compared nodes and count the number of branches it takes to go from the root down to one, then the root down to another and sum up the jumps we make between nodes.
+
 ```js
 // node class for creating new node objects
-class createNode {
+class Node {
   constructor(value){
     this.value = value;
     this.left = null;
@@ -25,100 +27,134 @@ class createNode {
   }
 }
 
-// our binary tree
+// our binary search tree
 class binaryTree{
   constructor(){
     this.root = {};
-    this.currentNode = null;
   }
 
   //adding new node with specific value to the tree
   addToTree(value){
-    let node = new createNode(value);
+    let node = new Node(value);
+    let currentNode = this.root;
     console.log(`New node to add: ${node.value}`);
 
     if (this.root.value === undefined){
       this.root = node;
       console.log(`Root was undefined, adding node`);
     } else {
-      this.currentNode = this.root;
-      this.branchExplore(node);
+      currentNode = this.root;
+      this.branchExplore(node, currentNode); //node+currentNode
     }
   }
 
 
   // finding an empty node to use
-  branchExplore(node){
+  branchExplore(node, currentNode){
 
     // loop through the nodes
-    while(this.currentNode){
+    while(currentNode){
 
       //left branch selected
-      if(node.value < this.currentNode.value){
-        console.log(`Going down left branch`);
-        if(this.currentNode.left === null){
+      if(node.value < currentNode.value){
+        if(currentNode.left === null){
           // empty node.left found, adding new node here
-          this.currentNode.left = node;
+          currentNode.left = node;
           break;
         } else {
           // advance node to left and continue looping
-          this.currentNode = this.currentNode.left;
+          currentNode = currentNode.left;
         }
       }
 
       //right branch selected
-      if(node.value > this.currentNode.value){
-        console.log(`Going down right branch`);
-        if(this.currentNode.right === null){
+      if(node.value > currentNode.value){
+        if(currentNode.right === null){
           // empty node.right found, adding new node here
-          this.currentNode.right = node;
+          currentNode.right = node;
           break;
         } else {
           // advance node to right and continue looping
-          this.currentNode = this.currentNode.right;
+          currentNode = currentNode.right;
         }
       }
     }
   }
 
   find(value){
-    this.currentNode = this.root;
+    let path = [];
+    let currentNode = this.root;
 
     if (this.root.value === value){
-      console.log(`Found ${value}`);
+      path.push(currentNode.value);
+      console.log(`Found ${value}, path was ${path}`);
+      return path;
     } else {
-
       // loop through nodes
-      while(this.currentNode){
+      while(currentNode){
+        path.push(currentNode.value);
+        if(currentNode.value === value){
 
-        if(this.currentNode.value === value){
-          console.log (`Found ${value}`)
-          return this.currentNode;
+          console.log(`Found ${value}, path was ${path.join(', ')}`);
+          return path;
         }
-
+        console.log(`current value: ${currentNode.value}`);
         //left branch
-        if(value < this.currentNode.value){
-          console.log(`Going down left branch`);
-          if(this.currentNode.left === null){
+        if(value < currentNode.value){
+          if(currentNode.left === null){
             break;
           } else {
-            this.currentNode = this.currentNode.left;
+
+            currentNode = currentNode.left;
+            //console.log(`left branch, value is now: ${currentNode.value}`);
           }
         }
 
         //right branch
-        if(value > this.currentNode.value){
-          console.log(`Going down right branch`);
-          if(this.currentNode.right === null){
+        else if(value > currentNode.value){
+          if(currentNode.right === null){
             break;
-          } else{
-            this.currentNode = this.currentNode.right;
+          } else {
+            currentNode = currentNode.right;
+            //console.log(`right branch, value is now: ${currentNode.value}`);
           }
         }
       }
     }
+
+    console.log(`Value not found`);
+    return [];
+  }
+
+  findDistance(value1, value2){
+    // always return positive integer
+    console.log(`\nfindDistance called for ${value1} and ${value2}`);
+    let path1 = this.find(value1);
+    let path2 = this.find(value2);
+
+    let joinedPath = path1.concat(path2);
+    console.log(`joined path array is: \n${joinedPath}`);
+
+    let temp = joinedPath.sort((a,b) => a-b); // problem with sort?
+    console.log(`sorted path array is now: \n${temp}`);
+    for (let i=0; i < temp.length; i++){
+
+      console.log(`temp[i] is ${temp[i]}, and temp[i+1] is ${temp[i+1]}`);
+      if (temp[i] === temp[i+1]){
+        console.log(`splice triggered`);
+        temp.splice(i, 2);
+        i--;
+      }
+    }
+    console.log(temp);
+
+
+    let distance = temp.length;
+    console.log(`Distance between nodes is: ${distance}`);
+    return distance;
   }
 }
+
 
 let testBinary = new binaryTree();
 testBinary.addToTree(8);
@@ -131,7 +167,10 @@ testBinary.addToTree(4);
 testBinary.addToTree(7);
 testBinary.addToTree(13);
 console.log(testBinary.root);
-console.log(testBinary.find(6));
-```
+console.log(testBinary.find(4));
 
-2. For this, we similarly need to scour the tree as we did earlier, but now we'll store the two compared nodes and count the number of branches it takes to go from the root down to one, then the root down to another and sum up the jumps we make between nodes.
+testBinary.findDistance(4, 13);
+testBinary.findDistance(4, 7);
+testBinary.findDistance(6, 7);
+// testBinary.findDistance(5, 2); // add error for when values are not in the tree?
+```
