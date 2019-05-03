@@ -1,0 +1,80 @@
+1. Recursion - a series of steps with a step referencing/calling a previous step, causing a loop to be created, usually only broken out of if some condition is met. Iteration - Working through steps with no such looping/reference to previous steps necessary to complete the instructions. In recursion, it's possible for us to wind up in an infinite loop - without defining a base case/condition to break the loop, the program will continually reference those same steps and forever loop back. However, with iteration, there should be no such looping - we can complete an iterative function in a certain amount of time - however, we may end up with a more complicated set of instructions that can be harder to understand than a recursive set of instructions.\
+
+2. 
+1. Pascal's triangle can be determined by recursion.
+2. Calculating a golden ratio can be done via recursion.
+3. The fibonnaci sequence can be calculated by recursion.
+4. We can reach the end of a linked list recursively.
+5. Calculating factorials is done recursively - used in probability theory.
+6. In nature, we can see fractal patterns/trees evolve, a form of recursion - for instance, the branching of a tree or succulents, or the branching of a river.
+
+3. We should use recursion when the recursive function is much simpler to implement than the iterative function - a recursive function that is complicated or computationally slower than a faster, less complex iterative function would not be prudent. If we have a large, complicated iterative solution, or in instances where it's necessary to have simply understood code, recursion would be a better implementation, however, sometimes it may be that a recursive solution is computationally intensive with non-obvious base cases, so the iterative function would still be better. For example, the fibonacci recursive function is computationally complex, while being simply understood 
+
+4. Using the factorial recursive and iterative solutions as an example, we can get an idea that applies to maximum and fibonacci recursive/iterative functions as well. 
+Recursive function:
+```js
+function factorial(n){
+  if (n < 0){
+    return -1; // error
+  }
+  if (n === 1 || n === 0){
+    return 1; // base case
+  } else {
+    return n*factorial(n-1);
+  }
+}
+```
+and the iterative function:
+```js
+function iterativeFactorial(n){
+  let current = 1;
+  for ( let i = 1; i <= n; i++){
+    current = current*i;
+  }
+  return current;
+}
+```
+Notably, the creation of a loop is involved in both the recursive and iterative functions, however, the way that loop is created is distinct for each solution. In the recursive function, the loop is created by calling the function itself, until some base case is met/condition is met and the loop then broken. In the iterative function, we define the loop solely within the function - there are no calls to the function itself. Both in the recursive and iterative cases, the duration of the loop is dependent on the input size n, however, the background memory and handling of the functions may vary (calling the function recursively vs a defined loop). Another big difference is the use of base cases in the recursive function - without a well-defined base case, we cannot break the recursive loop intuitively, whereas our iterative function requires no such base case to be implemented and run completely without a stack overflow.
+
+5.
+```js
+function findLength(list){
+  if (list[0] !== undefined){ // recursive case
+    list.shift();
+    return 1+findLength(list);
+  } else { // base case
+    return 0;
+  }
+}
+
+// dictionary length checks
+let longList = [2,4,2,33,45,66,777,11,22]; // size 9 array
+let longerList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]; // size 20 array
+console.log(`Length was ${findLength(longList)} of longList`);
+console.log(`Length was ${findLength(longerList)} of longerList`);
+```
+
+6. palindrome problem
+```js
+// recursive palindrome check
+function palindrome(word){
+  console.log(word);
+  if (word.length === 1){
+    return true; // base case, if the word is 1 letter long
+  } else if ( word.slice(0,1) === word.slice(-1)){ //recursive case
+    return palindrome(word.slice(1, -1)); // reducing the word to smaller substrings by removing beginning and ending letters recursively, comparing if the first/last letter are the same for each substring
+  } else {
+    return false; // if first/last letter are not the same, returns false.
+  }
+
+}
+
+let test1 = palindrome('racecar') // should return true
+let test2 = palindrome('monkey') // should return false
+let test3 = palindrome('ssunss') // should return false
+console.log(test1);
+console.log(test2);
+console.log(test3);
+```
+
+7. The google easter egg for recursion is a sort of joke because when you search for recursion, it asks if you meant recursion. Basically, we've already searched for recursion, but a recursive function will call itself - since google is returning us with a search result, we might expect it to end there. However, the search result is recursion - so, it prompts us to search again for recursion, bringing us back to the same function/search that we initiated with. This is an example of a recursive loop.
