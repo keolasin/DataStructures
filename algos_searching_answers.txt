@@ -43,4 +43,18 @@ console.log(binarySearch(test1, 'z'));
 console.log(binarySearch(test2, 'albatross'));
 ```
 
-2.
+2. For this, we would probably want to use a linear search:
+
+function linearSearch(sortedList, target){
+  for (let i = 0; i < sortedList.length; i++){
+    if (sortedList[i] === target){
+      console.log(`Found ${target} at index ${i}`);
+      return `Looped through ${i+1} times`;
+    }
+  }
+  console.log(`Did not find ${target}`);
+  return false;
+}
+
+let fishTest = ['gold','yellow','blue'];
+fishFinder(fishTest, 'yellow');
