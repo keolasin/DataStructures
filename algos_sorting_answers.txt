@@ -1,0 +1,50 @@
+1. Bubble sort:
+```js
+// bubble sort
+function bubbleSort(collection){
+  let swapped = null;
+  do {
+    swapped = false;
+    for (let i = 0; i < collection.length-1; i++){
+      if( collection[i] > collection[i+1] ){
+        let temp = collection[i];
+        collection[i] = collection[i+1];
+        collection[i+1] =temp;
+        swapped = true;
+      }
+    }
+  }while(swapped);
+  return collection;
+}
+let unsorted = [1,5,7,3,2,4];
+let unsorted2 = [5,8,3,1,2,0];
+console.log(bubbleSort(unsorted));
+console.log(bubbleSort(unsorted2));
+```
+
+2. Quicksort:
+FUNCTION quicksort (array)
+  SET pivotPoint TO last index in array
+  FOR EACH item IN array
+    IF item IS GREATER THAN pivotPoint
+      SET item TO array[pivotPoint+1]
+      pivotPoint--;
+    END IF
+    IF pivotPoint IS EQUAL TO array/2
+      FUNCTION partition(pivotPoint, array)
+        SET array1 TO array FROM array[0] TO array[pivotPoint]
+        SET array2 TO array FROM array[pivotPoint+1] TO last item in array
+      END FUNCTION
+      quicksort(array1)
+      quicksort(array2)
+      MERGE array1 AND pivotPoint AND array2
+    END IF
+  END FOR
+END FUNCTION
+
+3.
+Selection sort and insertion sort both are O(n^2) complexity time because they use nested for/while loops - we potentially have to go through each item in the array for every item in the array. Similarly, for bubble sort, we continually have to go through the array, swapping values until we have swapped every item in the array into its appropriate position - this too essentially acts as nested FOR loops, and so would be O(n^2) runtime.
+However, merge sort and quick sort vary in that they have an initial FOR loop - comparing items to others in the array, but at a certain point, we begin to partition the array into smaller and smaller groups to sort, then we merge those sorted partitions back into our complete collection. The first FOR/WHILE loop comparison gives us a runtime of O(n) - linear. However, as we partition and sort those partitions, we then see a log(n) runtime. Combining both the linear and logarithmic runtimes would give us a O(n*Log(n)) runtime.
+
+4.
+Bucket sort is a sorting algorithm that assigns unsorted data according to predetermined bins (or buckets) based on a certain range of values. For instance, we may have 10 bins ranging from 0-100 for every tens place (0-9, 10-19, etc), like a histogram used in statistics. We then sort those buckets, then merge them back into the original array. Bucket sort would be good for instances where we definitively know the range of the data and that data is evenly distributed throughout. For example, if we chose a random group of people and polled their birthdays - we might expect it to be evenly distributed throughout the whole year, and we may then create bins/buckets for each month, then sort those months. However, bucket sort does not work well when we have large clusters of data and many empty bins for a large - for instance, an exceptionally large range between Jeff Bezos or Bill Gates net worth and the average person. Similarly, bucket sort will fail outright when we fail to create a range that is inclusive of all the data - if we were sorting flight departure times for the month of February, creating bins for the dates 1-28, but every leap year, we would completely miss flights on February 29.
